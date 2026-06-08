@@ -1,18 +1,19 @@
+SWANLAB_PROJECT="qwen-medical-cpt" \
 CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 training/pretraining.py \
-    --model_name_or_path Qwen/Qwen3.5-2B \
-    --train_file_dir ./data/pretrain \
-    --validation_file_dir ./data/pretrain \
-    --per_device_train_batch_size 4 \
-    --per_device_eval_batch_size 4 \
+    --model_name_or_path /home/apulis-dev/userdata/2026/MedicalGPT/model/Qwen3.5-2B \
+    --train_file_dir /home/apulis-dev/userdata/2026/MedicalGPT/data/medical/cpt \
+    --validation_file_dir /home/apulis-dev/userdata/2026/MedicalGPT/data/medical/cpt \
+    --per_device_train_batch_size 8 \
+    --per_device_eval_batch_size 8 \
     --do_train \
     --do_eval \
     --use_peft True \
     --seed 42 \
-    --max_train_samples 10000 \
-    --max_eval_samples 10 \
+    --max_train_samples 50000 \
+    --max_eval_samples 100 \
     --num_train_epochs 0.5 \
-    --learning_rate 2e-4 \
-    --warmup_steps 5 \
+    --learning_rate 5e-5 \
+    --warmup_ratio 0.05 \
     --weight_decay 0.01 \
     --logging_strategy steps \
     --logging_steps 10 \
@@ -21,7 +22,7 @@ CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 training/pretraining.py \
     --save_steps 500 \
     --save_strategy steps \
     --save_total_limit 13 \
-    --gradient_accumulation_steps 8 \
+    --gradient_accumulation_steps 4 \
     --preprocessing_num_workers 10 \
     --block_size 512 \
     --packing True \
@@ -34,7 +35,7 @@ CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 training/pretraining.py \
     --lora_dropout 0.05 \
     --torch_dtype bfloat16 \
     --bf16 \
-    --report_to tensorboard \
+    --report_to swanlab \
     --ddp_find_unused_parameters False \
     --gradient_checkpointing True \
     --cache_dir ./cache

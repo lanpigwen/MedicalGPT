@@ -1,7 +1,7 @@
 #!/bin/bash
-
+SWANLAB_PROJECT="qwen-medical-cpt" \
 CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 training/grpo_training.py \
-    --model_name_or_path Qwen/Qwen3.5-2B \
+    --model_name_or_path /home/apulis-dev/userdata/2026/MedicalGPT/model/Qwen3.5-2B \
     --train_file_dir data/grpo \
     --train_samples -1 \
     --max_steps -1 --num_train_epochs 1 \
@@ -11,7 +11,7 @@ CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 training/grpo_training.py \
     --output_dir outputs-grpo-qwen-v1 \
     --dtype bfloat16 \
     --bf16 True \
-    --report_to tensorboard \
+    --report_to swanlab \
     --remove_unused_columns False \
     --gradient_checkpointing False \
     --beta 0.001 \
@@ -31,10 +31,10 @@ CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 training/grpo_training.py \
     --lora_dropout 0.1 \
     \
     `# 显存优化配置` \
-    --per_device_train_batch_size 4 \
+    --per_device_train_batch_size 2 \
     --per_device_eval_batch_size 1 \
     --num_generations 4 \
-    --gradient_accumulation_steps 1 \
+    --gradient_accumulation_steps 2 \
     --max_completion_length 512
 
 echo "训练完成!"

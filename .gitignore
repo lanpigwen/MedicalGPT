@@ -133,4 +133,8 @@ dmypy.json
 .cache/
 outputs-dpo-qwen-v1/
 cache/
-outputs-*/
+output/*
+data/
+model/
+CMExam/*
+eval_results/*

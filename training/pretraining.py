@@ -508,6 +508,14 @@ def main():
             types = [f.split('.')[-1] for f in eval_data_files]
             if len(set(types)) > 1:
                 raise ValueError(f"train files must be same type, e.g. all txt or all jsonl, but got {types}")
+        
+        # Validate that training files were found
+        if "train" not in data_files or len(data_files["train"]) == 0:
+            raise ValueError(
+                f"No training files found. Please check that --train_file_dir points to a directory "
+                f"containing .txt or .jsonl files. Got train_file_dir={data_args.train_file_dir}"
+            )
+        
         extension = "text" if data_files["train"][0].endswith('txt') else 'json'
         if extension == "text":
             dataset_args["keep_linebreaks"] = data_args.keep_linebreaks
