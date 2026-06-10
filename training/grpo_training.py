@@ -206,13 +206,18 @@ def grpo_train(
 
     # Prepare dataset
     with training_args.main_process_first(desc="Dataset preparation"):
+        '''
+        1.{'question': 'What is 123 + 456?', 'answer': '579'}
+        2.{'conversations': [{'role': 'user', 'content': 'What is 123 + 456?'}], 'chosen': '579'}
+        '''
+        
         dataset = dataset.map(
             lambda x: {
                 'prompt': [
                     {'role': 'system', 'content': SYSTEM_PROMPT},
-                    {'role': 'user', 'content': x['question']}
+                    {'role': 'user', 'content': x.get('question', "") if 'conversations' not in x else x['conversations'][0]['value']}
                 ],
-                'answer': x['answer']
+                'answer': x.get('answer', "") or x.get('chosen', "")  # Support different answer field names across datasets
             },
             num_proc=script_args.preprocessing_num_workers,
             desc="Processing dataset" if is_main_process else None,

@@ -8,7 +8,7 @@ import os
 from copy import deepcopy
 from dataclasses import dataclass, field
 from glob import glob
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 import sys
 
 import torch
@@ -159,6 +159,17 @@ class ScriptArguments:
         metadata={"help": "Remove unused columns from the dataset if `datasets.Dataset` is used"},
     )
     report_to: Optional[str] = field(default="tensorboard", metadata={"help": "Report to wandb or tensorboard"})
+    dpo_beta: Optional[float] = field(default=0.1, metadata={"help": "The beta parameter for DPO loss calculation"})
+    run_name: Optional[str] = field(default="dpo_run", metadata={"help": "The run name for logging"})
+    loss_type: Optional[List[str]] = field(
+        default_factory=lambda: ["sigmoid"],
+        metadata={"help": "The type of loss to use"}
+    )
+
+    loss_weights: Optional[List[float]] = field(
+        default_factory=lambda: [1.0],
+        metadata={"help": "The weights for the loss components"}
+    )
 
     def __post_init__(self):
         if self.model_name_or_path is None:
@@ -549,6 +560,7 @@ def main():
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         gradient_checkpointing=args.gradient_checkpointing,
         learning_rate=args.learning_rate,
+        beta=args.dpo_beta,
         eval_strategy=args.eval_strategy,
         eval_steps=args.eval_steps,
         output_dir=args.output_dir,
@@ -559,7 +571,9 @@ def main():
         bf16=args.bf16,
         fp16=args.fp16,
         remove_unused_columns=args.remove_unused_columns,
-        run_name=f"dpo_v1",
+        run_name=args.run_name,
+        loss_type=args.loss_type,
+        loss_weights=args.loss_weights,
     )
 
     # Initialize DPO trainer

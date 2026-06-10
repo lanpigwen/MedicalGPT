@@ -47,7 +47,7 @@
 #   --max_tokens 8 \
 #   --disable_think
 
-# filter_threshold=9
+# filter_threshold=10
 # # 05.b ) 根据 LLM 评分进行过滤（question 版）
 # python data_tools/wash/05b_filter_by_quality_score.py \
 #  --input_jsonl data/dxw/step05a_qa_quality_score/result.jsonl \

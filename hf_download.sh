@@ -1,5 +1,4 @@
 export HF_ENDPOINT=https://hf-mirror.com
 
-huggingface-cli download Qwen/Qwen2.5-3B \
-  --local-dir ./model/Qwen2.5-3B \
-  --local-dir-use-symlinks False
+hf download dl2gomi/vllm-0.21.0-cu128 \
+  --local-dir ./

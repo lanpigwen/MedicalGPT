@@ -222,6 +222,8 @@ def print_results(results):
         ])
 
     print("\n" + str(table))
+    
+    return table
 
 
 def main():
@@ -250,8 +252,12 @@ def main():
                 use_bertscore=args.use_bertscore
             )
         )
-
-    print_results(results)
+    print(args.input_file)
+    table = print_results(results)
+    # 再把结果保存到txt文件，方便后续分析
+    output_path = args.input_file.replace(".jsonl", "_metrics.txt")
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(str(table))
 
 
 if __name__ == "__main__":
